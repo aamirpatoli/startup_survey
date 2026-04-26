@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Software Development Practices Survey</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .header p {
+      font-size: 15px;
+      opacity: 0.95;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #e0e0e0;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 24px;
+      color: #667eea;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .section-desc {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 15px;
+    }
+
+    .question {
+      margin-bottom: 30px;
+    }
+
+    .question-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .required::after {
+      content: " *";
+      color: #e74c3c;
+    }
+
+    .help-text {
+      font-size: 13px;
+      color: #888;
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .radio-option,
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .radio-option:hover,
+    .checkbox-option:hover {
+      border-color: #667eea;
+      background: #f8f9ff;
+    }
+
+    .radio-option.selected,
+    .checkbox-option.selected {
+      border-color: #667eea;
+      background: #f0f3ff;
+    }
+
+    .radio-option input,
+    .checkbox-option input {
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .scale-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .scale-label {
+      font-size: 13px;
+      color: #666;
+      min-width: 60px;
+    }
+
+    .scale-options {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .scale-option {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .scale-option:hover {
+      border-color: #667eea;
+      background: #f8f9ff;
+    }
+
+    .scale-option.selected {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      gap: 15px;
+    }
+
+    button {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #f8f9ff;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .completion-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 30px;
+    }
+
+    .completion-screen.active {
+      display: block;
+    }
+
+    .completion-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+
+    .completion-screen h2 {
+      font-size: 32px;
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+
+    .completion-screen p {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .scale-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .scale-label {
+        text-align: center;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Software Development Practices and Methodology Selection in Startups</h1>
+      <p>This survey aims to understand software development practices, challenges, and contextual factors in startups. Estimated time: 10–15 minutes. All responses are confidential.</p>
+    </div>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="content" id="surveyContent">
+      <!-- Consent Section -->
+      <div class="section active" data-section="consent">
+        <div class="question">
+          <div class="question-title required">Do you consent to participate in this academic survey?</div>
+          <div class="help-text">If you select 'No', please do not proceed.</div>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="consent" value="yes" required>
+              <span>Yes, I consent</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="consent" value="no">
+              <span>No</span>
+            </label>
+          </div>
+          <div class="error-message" id="error-consent">Please select an option to continue</div>
+        </div>
+        <div class="button-group">
+          <button class="btn-primary" onclick="nextSection()">Start Survey →</button>
+        </div>
+      </div>
+
+      <!-- Section A -->
+      <div class="section" data-section="a">
+        <div class="section-title">Section A — Startup Profile</div>
+        <div class="section-desc">Tell us about your startup</div>
+
+        <div class="question">
+          <div class="question-title">1. Startup Name (Optional)</div>
+          <input type="text" name="startup_name" placeholder="Enter startup name">
+        </div>
+
+        <div class="question">
+          <div class="question-title required">2. Your Role in the Startup</div>
+          <select name="role" required>
+            <option value="">Select your role</option>
+            <option value="Founder">Founder</option>
+            <option value="Co-founder">Co-founder</option>
+            <option value="CTO">CTO</option>
+            <option value="Developer">Developer</option>
+            <option value="Product Manager">Product Manager</option>
+            <option value="Mentor">Mentor</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">3. Startup Stage</div>
+          <select name="stage" required>
+            <option value="">Select stage</option>
+            <option value="Idea">Idea</option>
+            <option value="Prototype">Prototype</option>
+            <option value="Growth">Growth</option>
+            <option value="Scaling">Scaling</option>
+            <option value="Established">Established</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">4. Team Size</div>
+          <select name="team_size" required>
+            <option value="">Select team size</option>
+            <option value="1-5">1–5</option>
+            <option value="6-10">6–10</option>
+            <option value="11-20">11–20</option>
+            <option value="20+">More than 20</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">5. Expected Time-to-Market</div>
+          <select name="time_to_market" required>
+            <option value="">Select timeframe</option>
+            <option value="<3 months"><3 months</option>
+            <option value="3-6 months">3–6 months</option>
+            <option value="6-12 months">6–12 months</option>
+            <option value=">1 year">>1 year</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">6. Frequency of Business Model Changes</div>
+          <select name="biz_changes" required>
+            <option value="">Select frequency</option>
+            <option value="Very frequent">Very frequent</option>
+            <option value="Occasional">Occasional</option>
+            <option value="Rare">Rare</option>
+            <option value="Never">Never</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">7. Uncertainty in Product Requirements</div>
+          <div class="scale-container">
+            <div class="scale-label">Low</div>
+            <div class="scale-options" data-scale="uncertainty">
+              <div class="scale-option" data-value="1">1</div>
+              <div class="scale-option" data-value="2">2</div>
+              <div class="scale-option" data-value="3">3</div>
+              <div class="scale-option" data-value="4">4</div>
+              <div class="scale-option" data-value="5">5</div>
+            </div>
+            <div class="scale-label">High</div>
+          </div>
+          <input type="hidden" name="uncertainty" required>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">8. Startup Domain</div>
+          <select name="domain" required>
+            <option value="">Select domain</option>
+            <option value="FinTech">FinTech</option>
+            <option value="HealthTech">HealthTech</option>
+            <option value="EdTech">EdTech</option>
+            <option value="AI-ML">AI-ML</option>
+            <option value="E-commerce">E-commerce</option>
+            <option value="IoT">IoT</option>
+            <option value="SaaS">SaaS</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title">9. Briefly describe your product or service</div>
+          <textarea name="product_desc" placeholder="Describe your product..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="nextSection()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Section B -->
+      <div class="section" data-section="b">
+        <div class="section-title">Section B — Technical & Process Environment</div>
+        <div class="section-desc">Your technical setup and processes</div>
+
+        <div class="question">
+          <div class="question-title">10. Technology Stack (select all that apply)</div>
+          <div class="checkbox-group" data-checkbox="tech_stack">
+            <label class="checkbox-option">
+              <input type="checkbox" name="tech_stack" value="Web">
+              <span>Web</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="tech_stack" value="Mobile">
+              <span>Mobile</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="tech_stack" value="Desktop">
+              <span>Desktop</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="tech_stack" value="Cloud-native">
+              <span>Cloud-native</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="tech_stack" value="Embedded">
+              <span>Embedded</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="tech_stack" value="AI-ML">
+              <span>AI-ML</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">11. Deployment Environment</div>
+          <select name="deployment" required>
+            <option value="">Select environment</option>
+            <option value="Cloud">Cloud</option>
+            <option value="On-premises">On-premises</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">12. Use of DevOps / CI/CD</div>
+          <select name="devops" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="Partial">Partial</option>
+            <option value="No">No</option>
+            <option value="Planning">Planning to adopt</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">13. Plan to Scale System within Next Year</div>
+          <select name="scale_plan" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">14. Integration of AI/ML in Product</div>
+          <select name="ai_integration" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Planned">Planned</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">15. Current Methodology</div>
+          <select name="methodology" required>
+            <option value="">Select methodology</option>
+            <option value="Scrum">Scrum</option>
+            <option value="Kanban">Kanban</option>
+            <option value="XP">XP</option>
+            <option value="Lean">Lean</option>
+            <option value="Waterfall">Waterfall</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">16. Typical Sprint or Iteration Cycle</div>
+          <select name="sprint_cycle" required>
+            <option value="">Select cycle</option>
+            <option value="1 week">1 week</option>
+            <option value="2 weeks">2 weeks</option>
+            <option value="3-4 weeks">3–4 weeks</option>
+            <option value="Continuous">Continuous flow</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title">17. Tools Used for Project Management (select all that apply)</div>
+          <div class="checkbox-group" data-checkbox="pm_tools">
+            <label class="checkbox-option">
+              <input type="checkbox" name="pm_tools" value="Jira">
+              <span>Jira</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="pm_tools" value="Trello">
+              <span>Trello</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="pm_tools" value="GitHub">
+              <span>GitHub</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="pm_tools" value="Asana">
+              <span>Asana</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="pm_tools" value="Excel">
+              <span>Excel</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="pm_tools" value="None">
+              <span>None</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="pm_tools" value="Other">
+              <span>Other</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">18. Frequency of Product Releases</div>
+          <select name="release_freq" required>
+            <option value="">Select frequency</option>
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Quarterly">Quarterly</option>
+            <option value="On demand">On demand</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title">19. User Feedback Collection Method (select all that apply)</div>
+          <div class="checkbox-group" data-checkbox="feedback_methods">
+            <label class="checkbox-option">
+              <input type="checkbox" name="feedback_methods" value="Surveys">
+              <span>Surveys</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="feedback_methods" value="Analytics">
+              <span>Analytics</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="feedback_methods" value="Social Media">
+              <span>Social Media</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="feedback_methods" value="Client Discussion">
+              <span>Client Discussion</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="feedback_methods" value="None">
+              <span>None</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="feedback_methods" value="Other">
+              <span>Other</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="nextSection()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Section C -->
+      <div class="section" data-section="c">
+        <div class="section-title">Section C — Organizational Readiness</div>
+        <div class="section-desc">Team capabilities and structure</div>
+
+        <div class="question">
+          <div class="question-title required">20. Average Technical Experience of Team</div>
+          <select name="tech_exp" required>
+            <option value="">Select experience level</option>
+            <option value="<1 year"><1 year</option>
+            <option value="1-3 years">1–3 years</option>
+            <option value="3-5 years">3–5 years</option>
+            <option value=">5 years">>5 years</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">21. Access to Mentors or Process Experts</div>
+          <select name="mentor_access" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="Occasionally">Occasionally</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">22. Familiarity with Structured Processes</div>
+          <select name="process_familiarity" required>
+            <option value="">Select level</option>
+            <option value="High">High</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">23. Preferred Process Type</div>
+          <select name="process_pref" required>
+            <option value="">Select preference</option>
+            <option value="Lightweight">Lightweight</option>
+            <option value="Structured">Structured</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">24. Dedicated Product Owner or Project Manager</div>
+          <select name="pm_dedicated" required>
+            <option value="">Select option</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title">25. What skills or areas does your team most need support in?</div>
+          <textarea name="skills_needed" placeholder="Describe skills needed..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="nextSection()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Section D -->
+      <div class="section" data-section="d">
+        <div class="section-title">Section D — Business Context & Market Environment</div>
+        <div class="section-desc">Market and business pressures</div>
+
+        <div class="question">
+          <div class="question-title required">26. Regulatory Environment</div>
+          <select name="regulatory" required>
+            <option value="">Select option</option>
+            <option value="Highly regulated">Highly regulated</option>
+            <option value="Moderately regulated">Moderately regulated</option>
+            <option value="Not regulated">Not regulated</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">27. Customer Feedback Importance</div>
+          <select name="feedback_importance" required>
+            <option value="">Select option</option>
+            <option value="Critical">Critical</option>
+            <option value="Somewhat important">Somewhat important</option>
+            <option value="Not a focus">Not a focus</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">28. Market Competitiveness</div>
+          <select name="competition" required>
+            <option value="">Select level</option>
+            <option value="High">High</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">29. Project Deadlines</div>
+          <select name="deadlines" required>
+            <option value="">Select option</option>
+            <option value="Fixed">Fixed</option>
+            <option value="Flexible">Flexible</option>
+            <option value="Continuous delivery">Continuous delivery</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">30. Revenue Pressure</div>
+          <select name="revenue_pressure" required>
+            <option value="">Select level</option>
+            <option value="Very high">Very high</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">31. Influence of Investor or Incubator Funding</div>
+          <select name="funding_influence" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Partially">Partially</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title">32. Biggest Business Risks</div>
+          <textarea name="business_risks" placeholder="Describe main risks..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="nextSection()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Section E -->
+      <div class="section" data-section="e">
+        <div class="section-title">Section E — Incubation Center Influence</div>
+        <div class="section-desc">Support from your incubation center</div>
+
+        <div class="question">
+          <div class="question-title required">33. Incubation center support for methodologies</div>
+          <select name="incubator_support" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="Occasionally">Occasionally</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">34. Incubator promotes specific methodologies</div>
+          <select name="incubator_promotes" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">35. Other startups follow Agile practices</div>
+          <select name="peer_agile" required>
+            <option value="">Select option</option>
+            <option value="Most">Most</option>
+            <option value="Some">Some</option>
+            <option value="Few">Few</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">36. Support for adopting AI-based methodologies</div>
+          <div class="scale-container">
+            <div class="scale-label">Low</div>
+            <div class="scale-options" data-scale="ai_support">
+              <div class="scale-option" data-value="1">1</div>
+              <div class="scale-option" data-value="2">2</div>
+              <div class="scale-option" data-value="3">3</div>
+              <div class="scale-option" data-value="4">4</div>
+              <div class="scale-option" data-value="5">5</div>
+            </div>
+            <div class="scale-label">High</div>
+          </div>
+          <input type="hidden" name="ai_support" required>
+        </div>
+
+        <div class="question">
+          <div class="question-title">37. How does incubation support influence project success?</div>
+          <textarea name="incubator_influence" placeholder="Describe the influence..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="nextSection()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Section F -->
+      <div class="section" data-section="f">
+        <div class="section-title">Section F — Challenges, Learning & Adaptation</div>
+        <div class="section-desc">Your experiences and lessons learned</div>
+
+        <div class="question">
+          <div class="question-title">38. Main Challenges (select all that apply)</div>
+          <div class="checkbox-group" data-checkbox="challenges">
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Time">
+              <span>Time</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Requirements">
+              <span>Requirements</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Funding">
+              <span>Funding</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Mentorship">
+              <span>Mentorship</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Communication">
+              <span>Communication</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Quality">
+              <span>Quality</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Resources">
+              <span>Resources</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="challenges" value="Other">
+              <span>Other</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">39. Satisfaction with Current Process</div>
+          <div class="scale-container">
+            <div class="scale-label">Very low</div>
+            <div class="scale-options" data-scale="satisfaction">
+              <div class="scale-option" data-value="1">1</div>
+              <div class="scale-option" data-value="2">2</div>
+              <div class="scale-option" data-value="3">3</div>
+              <div class="scale-option" data-value="4">4</div>
+              <div class="scale-option" data-value="5">5</div>
+            </div>
+            <div class="scale-label">Very high</div>
+          </div>
+          <input type="hidden" name="satisfaction" required>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">40. Changed Process in Last 12 Months</div>
+          <select name="process_change" required>
+            <option value="">Select option</option>
+            <option value="Major">Major</option>
+            <option value="Minor">Minor</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title">41. Reason for Change</div>
+          <textarea name="change_reason" placeholder="Describe the reason..."></textarea>
+        </div>
+
+        <div class="question">
+          <div class="question-title">42. Lessons Learned</div>
+          <textarea name="lessons" placeholder="Share your lessons..."></textarea>
+        </div>
+
+        <div class="question">
+          <div class="question-title">43. What kind of mentorship or training from your incubation center would most improve your development process?</div>
+          <textarea name="mentorship_needs" placeholder="Describe mentorship needs..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="nextSection()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Section G -->
+      <div class="section" data-section="g">
+        <div class="section-title">Section G — Future Orientation & Innovation</div>
+        <div class="section-desc">Your goals and vision</div>
+
+        <div class="question">
+          <div class="question-title">44. Top 3 Goals (select up to 3)</div>
+          <div class="checkbox-group" data-checkbox="goals" data-max="3">
+            <label class="checkbox-option">
+              <input type="checkbox" name="goals" value="Delivery">
+              <span>Delivery</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="goals" value="Quality">
+              <span>Quality</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="goals" value="Flexibility">
+              <span>Flexibility</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="goals" value="Predictability">
+              <span>Predictability</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="goals" value="Scalability">
+              <span>Scalability</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="goals" value="Cost">
+              <span>Cost</span>
+            </label>
+          </div>
+          <div class="help-text">Select up to 3 goals</div>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">45. Open to AI-based Process Guidance</div>
+          <select name="ai_guidance" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="Maybe">Maybe</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title required">46. Participate in Pilot Implementation</div>
+          <select name="pilot_participation" required>
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="Maybe">Maybe</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <div class="question-title">47. What Makes a Process Successful</div>
+          <textarea name="success_factors" placeholder="Describe success factors..."></textarea>
+        </div>
+
+        <div class="question">
+          <div class="question-title">48. Describe Process-related Issues</div>
+          <textarea name="process_issues" placeholder="Describe issues..."></textarea>
+        </div>
+
+        <div class="question">
+          <div class="question-title">49. AI Features or Recommendations Needed</div>
+          <textarea name="ai_features" placeholder="Describe AI features..."></textarea>
+        </div>
+
+        <div class="question">
+          <div class="question-title">50. How do you envision AI tools supporting your startup's decision-making or project management in the future?</div>
+          <textarea name="ai_vision" placeholder="Share your vision..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="nextSection()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Section H -->
+      <div class="section" data-section="h">
+        <div class="section-title">Section H — Closing & Reflection</div>
+        <div class="section-desc">Final thoughts</div>
+
+        <div class="question">
+          <div class="question-title required">51. Overall Process Maturity</div>
+          <div class="scale-container">
+            <div class="scale-label">Initial/Ad hoc</div>
+            <div class="scale-options" data-scale="maturity">
+              <div class="scale-option" data-value="1">1</div>
+              <div class="scale-option" data-value="2">2</div>
+              <div class="scale-option" data-value="3">3</div>
+              <div class="scale-option" data-value="4">4</div>
+              <div class="scale-option" data-value="5">5</div>
+            </div>
+            <div class="scale-label">Optimized</div>
+          </div>
+          <input type="hidden" name="maturity" required>
+        </div>
+
+        <div class="question">
+          <div class="question-title">52. Final Suggestions or Advice</div>
+          <textarea name="suggestions" placeholder="Share your suggestions..."></textarea>
+        </div>
+
+        <div class="question">
+          <div class="question-title">53. If you could redesign your software development approach from scratch, what would you do differently and why?</div>
+          <textarea name="redesign" placeholder="Share your thoughts..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="prevSection()">← Back</button>
+          <button class="btn-primary" onclick="submitSurvey()">Submit Survey</button>
+        </div>
+      </div>
+
+      <!-- Completion Screen -->
+      <div class="completion-screen" id="completionScreen">
+        <div class="completion-icon">✅</div>
+        <h2>Thank You!</h2>
+        <p>Your responses have been recorded. We appreciate your time and valuable insights.<br><br>Your feedback will help us develop better AI-based methodologies for startups.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSection = 0;
+    const sections = ['consent', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const surveyData = {};
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      setupScaleInputs();
+      setupCheckboxes();
+      setupRadioButtons();
+      updateProgress();
+    });
+
+    function setupScaleInputs() {
+      document.querySelectorAll('.scale-options').forEach(container => {
+        const scaleName = container.dataset.scale;
+        container.querySelectorAll('.scale-option').forEach(option => {
+          option.addEventListener('click', () => {
+            container.querySelectorAll('.scale-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            document.querySelector(`input[name="${scaleName}"]`).value = option.dataset.value;
+          });
+        });
+      });
+    }
+
+    function setupCheckboxes() {
+      document.querySelectorAll('.checkbox-group').forEach(group => {
+        const maxLimit = group.dataset.max ? parseInt(group.dataset.max) : null;
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        
+        checkboxes.forEach(cb => {
+          cb.addEventListener('change', (e) => {
+            const label = e.target.closest('.checkbox-option');
+            if (e.target.checked) {
+              label.classList.add('selected');
+              if (maxLimit) {
+                const checked = Array.from(checkboxes).filter(c => c.checked);
+                if (checked.length > maxLimit) {
+                  e.target.checked = false;
+                  label.classList.remove('selected');
+                  alert(`Please select at most ${maxLimit} options`);
+                }
+              }
+            } else {
+              label.classList.remove('selected');
+            }
+          });
+        });
+      });
+    }
+
+    function setupRadioButtons() {
+      document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          const group = e.target.name;
+          document.querySelectorAll(`input[name="${group}"]`).forEach(r => {
+            r.closest('.radio-option').classList.remove('selected');
+          });
+          if (e.target.checked) {
+            e.target.closest('.radio-option').classList.add('selected');
+          }
+        });
+      });
+    }
+
+    function validateSection() {
+      const currentSectionEl = document.querySelector(`.section[data-section="${sections[currentSection]}"]`);
+      const requiredInputs = currentSectionEl.querySelectorAll('[required]');
+      let valid = true;
+
+      requiredInputs.forEach(input => {
+        if (input.type === 'hidden') {
+          if (!input.value) {
+            valid = false;
+          }
+        } else if (input.tagName === 'SELECT') {
+          if (!input.value) {
+            valid = false;
+            input.style.borderColor = '#e74c3c';
+          } else {
+            input.style.borderColor = '#e0e0e0';
+          }
+        } else if (input.type === 'radio') {
+          const name = input.name;
+          const checked = currentSectionEl.querySelector(`input[name="${name}"]:checked`);
+          if (!checked) {
+            valid = false;
+            const error = currentSectionEl.querySelector(`#error-${name}`);
+            if (error) error.classList.add('show');
+          } else {
+            const error = currentSectionEl.querySelector(`#error-${name}`);
+            if (error) error.classList.remove('show');
+          }
+        }
+      });
+
+      if (!valid) {
+        alert('Please complete all required fields before continuing');
+      }
+
+      return valid;
+    }
+
+    function nextSection() {
+      if (!validateSection()) return;
+      
+      saveCurrentSection();
+      
+      if (currentSection === 0) {
+        const consent = document.querySelector('input[name="consent"]:checked');
+        if (consent && consent.value === 'no') {
+          alert('Thank you for your time. You must consent to participate in the survey.');
+          return;
+        }
+      }
+
+      if (currentSection < sections.length - 1) {
+        document.querySelector(`.section[data-section="${sections[currentSection]}"]`).classList.remove('active');
+        currentSection++;
+        document.querySelector(`.section[data-section="${sections[currentSection]}"]`).classList.add('active');
+        updateProgress();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function prevSection() {
+      saveCurrentSection();
+      if (currentSection > 0) {
+        document.querySelector(`.section[data-section="${sections[currentSection]}"]`).classList.remove('active');
+        currentSection--;
+        document.querySelector(`.section[data-section="${sections[currentSection]}"]`).classList.add('active');
+        updateProgress();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function saveCurrentSection() {
+      const currentSectionEl = document.querySelector(`.section[data-section="${sections[currentSection]}"]`);
+      
+      currentSectionEl.querySelectorAll('input[type="text"], input[type="email"], textarea, select').forEach(input => {
+        if (input.name) {
+          surveyData[input.name] = input.value;
+        }
+      });
+
+      currentSectionEl.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+        surveyData[radio.name] = radio.value;
+      });
+
+      currentSectionEl.querySelectorAll('input[type="hidden"]').forEach(input => {
+        if (input.name && input.value) {
+          surveyData[input.name] = input.value;
+        }
+      });
+
+      const checkboxGroups = {};
+      currentSectionEl.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        if (!checkboxGroups[cb.name]) {
+          checkboxGroups[cb.name] = [];
+        }
+        checkboxGroups[cb.name].push(cb.value);
+      });
+      Object.assign(surveyData, checkboxGroups);
+    }
+
+    function updateProgress() {
+      const progress = ((currentSection + 1) / sections.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function submitSurvey() {
+      if (!validateSection()) return;
+      
+      saveCurrentSection();
+      
+      // Send data to Flask backend → SQLite database
+      fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(surveyData)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log('Saved:', data);
+      })
+      .catch(err => {
+        console.error('Error saving response:', err);
+      });
+
+      document.querySelector(`.section[data-section="${sections[currentSection]}"]`).classList.remove('active');
+      document.getElementById('completionScreen').classList.add('active');
+      document.getElementById('progressFill').style.width = '100%';
+      window.scrollTo(0, 0);
+    }
+  </script>
+</body>
+</html>
